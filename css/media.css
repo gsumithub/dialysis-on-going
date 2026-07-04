@@ -245,7 +245,20 @@
         padding: 24px;
         text-align: center;
     }
+
+    /* Force side margins on all components except the full-width hero */
+    .landing-splits-section,
+    .landing-features,
+    .landing-about-section,
+    .landing-section,
+    .overlapping-badges-card-wrapper,
+    .funnel__container {
+        width: 90% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
 }
+
 
 
 
