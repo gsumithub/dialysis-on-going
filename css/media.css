@@ -208,6 +208,44 @@
     .about-narrative {
         text-align: center;
     }
+
+    .header__links {
+        display: none;
+    }
+
+    .overlapping-badges-card-wrapper {
+        margin-top: -40px;
+        padding: 0 10px;
+        margin-bottom: 30px;
+    }
+
+    .overlapping-badges-card {
+        padding: 20px;
+    }
+
+    .badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .process-flow-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .founder-card-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .founder-avatar-col {
+        min-height: 250px;
+    }
+
+    .founder-info-col {
+        padding: 24px;
+        text-align: center;
+    }
 }
+
 
 

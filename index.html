@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Owl Carousel CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/media.css">
@@ -28,10 +31,13 @@
                     <p class="brand-tagline">Dialysis Care Everywhere You Travel</p>
                 </div>
             </div>
-            <a href="tel:+918750004177" class="header__support">
-                <i class="ph-fill ph-phone"></i>
-                <span>Support: +91 87500 04177</span>
-            </a>
+            <div class="header__links">
+                <a href="#how-it-works" class="header__navlink">How it Works</a>
+                <a href="#our-story" class="header__navlink">Our Story</a>
+                <a href="#founder" class="header__navlink">Founder</a>
+                <span class="header__navlink text-btn" id="header-list-clinic-btn" style="cursor: pointer;">List your clinic</span>
+                <button type="button" class="btn-primary header-book-btn" id="header-book-session-btn">Book Session</button>
+            </div>
         </div>
     </header>
 
@@ -40,15 +46,57 @@
              LANDING PAGE CONTAINER
              ========================================== -->
         <div class="landing__container" id="landing-container">
+            <!-- Beach Hero Section -->
             <section class="landing-hero">
                 <div class="hero-overlay"></div>
                 <div class="hero-content">
-                    <span class="hero-tag">INDIA'S TRUSTED PLATFORM</span>
-                    <h1>Partner With Us, Grow With Us</h1>
-                    <p class="hero-subtitle">DialysisOnGo connects dialysis centers with travelers who need quality care, anytime and anywhere. Simplify bookings and maintain clinical continuity seamlessly.</p>
+                    <h1>Dialysis Care Everywhere You Travel</h1>
+                    <p class="hero-subtitle">DialysisOnGo connects dialysis centers with travelers who need quality care, anytime and anywhere.</p>
+                    <div class="hero-actions-row">
+                        <button type="button" class="btn-primary hero-btn-red" id="hero-book-session-btn">
+                            Book Your Session <i class="ph-bold ph-arrow-right"></i>
+                        </button>
+                        <button type="button" class="btn-secondary hero-btn-outline" id="hero-list-clinic-btn">
+                            List Your Clinic <i class="ph-bold ph-storefront"></i>
+                        </button>
+                    </div>
                 </div>
             </section>
 
+            <!-- Overlapping Care Provider Badges Card -->
+            <div class="overlapping-badges-card-wrapper">
+                <div class="overlapping-badges-card">
+                    <p class="badges-card-title">INTEGRATED WITH INDIA'S LEADING CARE PROVIDERS</p>
+                    <div class="badges-grid">
+                        <div class="badge-item">
+                            <div class="badge-icon-circle pink-bg">
+                                <i class="ph-fill ph-certificate"></i>
+                            </div>
+                            <span class="badge-label">NABH Accredited</span>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon-circle pink-bg">
+                                <i class="ph-fill ph-globe"></i>
+                            </div>
+                            <span class="badge-label">JCI Accredited</span>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon-circle pink-bg">
+                                <i class="ph-fill ph-shield-check"></i>
+                            </div>
+                            <span class="badge-label">Verified Centers</span>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon-circle pink-bg">
+                                <i class="ph-fill ph-star"></i>
+                            </div>
+                            <span class="badge-label">Premium Quality</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Splits Booking Row -->
             <section class="landing-splits-section">
                 <div class="splits-grid">
                     <!-- Split 1: Patient Booking -->
@@ -81,6 +129,34 @@
                 </div>
             </section>
 
+            <!-- How It Works Section -->
+            <section id="how-it-works" class="landing-section">
+                <h3 class="section-title">Simple Process</h3>
+                <p class="section-subtitle">How DialysisOnGo guarantees a safe journey</p>
+                <div class="process-flow-grid">
+                    <div class="process-step-card">
+                        <div class="step-badge">1</div>
+                        <h4>Get Inquiries</h4>
+                        <p>Patients submit their travel dates and destination preferences.</p>
+                    </div>
+                    <div class="process-step-card">
+                        <div class="step-badge">2</div>
+                        <h4>Booking Received</h4>
+                        <p>Requests are automatically routed to our verified local dialysis centers.</p>
+                    </div>
+                    <div class="process-step-card">
+                        <div class="step-badge">3</div>
+                        <h4>Lock Slot</h4>
+                        <p>HOD Nephrologists lock and confirm patient treatment slot schedules.</p>
+                    </div>
+                    <div class="process-step-card">
+                        <div class="step-badge">4</div>
+                        <h4>Patient's Visit</h4>
+                        <p>Patients undergo their dialysis sessions smoothly during vacation.</p>
+                    </div>
+                </div>
+            </section>
+
             <!-- Brand Features Grid matching PDF flyer page 1 -->
             <section class="landing-features">
                 <div class="feature-item">
@@ -100,8 +176,8 @@
                 </div>
             </section>
 
-            <!-- About Us & Animated Counters Section -->
-            <section class="landing-about-section">
+            <!-- Our Story Section -->
+            <section id="our-story" class="landing-about-section">
                 <div class="about-grid">
                     <div class="about-narrative">
                         <h3>Our Story &amp; Philosophy</h3>
@@ -133,6 +209,54 @@
                                 <span class="counter-plus">+</span>
                             </div>
                             <span class="counter-label">Indian States Covered</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Founder Section -->
+            <section id="founder" class="landing-section founder-section">
+                <div class="founder-card-layout">
+                    <div class="founder-avatar-col">
+                        <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=400&q=80" alt="Dr. Sandeep Agarwal" class="founder-img">
+                    </div>
+                    <div class="founder-info-col">
+                        <span class="founder-tag">OUR FOUNDER</span>
+                        <h3>Dr. Sandeep Agarwal</h3>
+                        <p class="founder-subtitle">Senior Nephrologist &amp; HOD Kidney Care</p>
+                        <p class="founder-description">"At DialysisOnGo, our mission is to break down medical barriers. Kidney care should never restrict your freedom to travel, explore, and spend quality time with loved ones. We have built a network of NABH/JCI accredited centers to ensure clinical standards remain uncompromised, anywhere in India."</p>
+                        <div class="founder-signature">Dr. Sandeep Agarwal</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials Slider Section -->
+            <section class="landing-section testimonials-section">
+                <h3 class="section-title">Patient &amp; Partner Reviews</h3>
+                <p class="section-subtitle">Real stories from our clinical network</p>
+                <div class="owl-carousel owl-theme testimonials-carousel">
+                    <div class="testimonial-slide-card">
+                        <i class="ph-fill ph-quotes testimonial-quote-icon"></i>
+                        <p class="testimonial-text">"Traveling to Goa seemed impossible due to my thrice-a-week dialysis sessions. DialysisOnGo paired me with a premium NABH center. The session was seamless and allowed me to enjoy my holiday!"</p>
+                        <div class="testimonial-author">
+                            <strong>Amit Sharma</strong>
+                            <span>Traveler from New Delhi</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide-card">
+                        <i class="ph-fill ph-quotes testimonial-quote-icon"></i>
+                        <p class="testimonial-text">"As a clinic manager in Mumbai, DialysisOnGo has helped us manage visitor bookings easily. The verification dashboard handles viral-isolation checking perfectly."</p>
+                        <div class="testimonial-author">
+                            <strong>Dr. Priya Mehta</strong>
+                            <span>Apex Dialysis Hospital</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide-card">
+                        <i class="ph-fill ph-quotes testimonial-quote-icon"></i>
+                        <p class="testimonial-text">"Excellent coordination. They handled my clinical report transfers directly with the destination clinic HOD, leaving me with zero stress."</p>
+                        <div class="testimonial-author">
+                            <strong>Karan Johar</strong>
+                            <span>Traveler from Bangalore</span>
                         </div>
                     </div>
                 </div>
@@ -723,6 +847,10 @@
         <span class="tooltip-text">Call Support</span>
     </a>
 
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Owl Carousel JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <!-- Script File -->
     <script src="js/app.js"></script>
 </body>

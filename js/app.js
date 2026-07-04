@@ -196,7 +196,42 @@ function init() {
 
     // 8. Clear error outlines on input
     setupClearErrorsOnInput();
+
+    // 9. Add new hero/header actions
+    document.getElementById("hero-book-session-btn").addEventListener("click", () => {
+        startWizardFromLanding("patient");
+    });
+    document.getElementById("header-book-session-btn").addEventListener("click", () => {
+        startWizardFromLanding("patient");
+    });
+    document.getElementById("hero-list-clinic-btn").addEventListener("click", () => {
+        startWizardFromLanding("clinic");
+    });
+    document.getElementById("header-list-clinic-btn").addEventListener("click", () => {
+        startWizardFromLanding("clinic");
+    });
+
+    // 10. Scroll link handlers
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            // If wizard is open, return to landing first
+            if (wizardContainer.style.display === "block") {
+                if (targetId === '#landing-container' || targetId === '#how-it-works' || targetId === '#our-story' || targetId === '#founder') {
+                    e.preventDefault();
+                    returnToLanding();
+                    setTimeout(() => {
+                        const targetEl = document.querySelector(targetId);
+                        if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                }
+            }
+        });
+    });
 }
+
 
 function startWizardFromLanding(flow) {
     landingContainer.style.display = "none";
@@ -612,8 +647,41 @@ function initCounters() {
 
 // Call counters initiation
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initCounters);
+    document.addEventListener("DOMContentLoaded", () => {
+        initCounters();
+        initTestimonialsCarousel();
+    });
 } else {
     initCounters();
+    initTestimonialsCarousel();
 }
+
+function initTestimonialsCarousel() {
+    if (typeof jQuery !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
+        $(".testimonials-carousel").owlCarousel({
+            loop: true,
+            margin: 20,
+            responsiveClass: true,
+            autoplay: true,
+            autoplayTimeout: 4000,
+            autoplayHoverPause: true,
+            responsive: {
+                0: {
+                    items: 1,
+                    nav: false
+                },
+                768: {
+                    items: 2,
+                    nav: false
+                },
+                1000: {
+                    items: 3,
+                    nav: false,
+                    loop: true
+                }
+            }
+        });
+    }
+}
+
 

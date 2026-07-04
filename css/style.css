@@ -122,29 +122,37 @@ header {
     margin-top: 2px;
 }
 
-.header__support {
+.header__links {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 20px;
+}
+
+.header__navlink {
+    font-size: 14px;
+    font-weight: 600;
     color: var(--text-main);
     text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    padding: 8px 16px;
-    background-color: var(--body-bg);
-    border-radius: var(--border-radius-full);
-    border: 1px solid var(--border-color);
     transition: var(--transition-smooth);
 }
 
-.header__support i {
+.header__navlink:hover {
     color: var(--primary);
 }
 
-.header__support:hover {
-    border-color: var(--primary);
-    background-color: var(--primary-light);
-    color: var(--primary-dark);
+.header__navlink.text-btn {
+    color: var(--text-main);
+}
+
+.header__navlink.text-btn:hover {
+    color: var(--primary);
+}
+
+.header-book-btn {
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: var(--border-radius-full);
 }
 
 /* ==========================================
@@ -1410,6 +1418,317 @@ input[type="number"]:focus {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.06); }
 }
+
+/* ==========================================
+   HIGH FIDELITY BEACH HERO & SECTIONS
+   ========================================== */
+
+/* Beach Hero Specific */
+.landing-hero {
+    position: relative;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    background-color: var(--secondary);
+    background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80');
+    background-size: cover;
+    background-position: center;
+    padding: 100px 40px 140px; /* Leave padding-bottom for overlapping card offset */
+    text-align: center;
+    margin-bottom: 0px; /* Zero margin because the overlapping card takes care of spacing */
+    box-shadow: var(--shadow-md);
+}
+
+.hero-actions-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    position: relative;
+    z-index: 5;
+}
+
+.hero-btn-red {
+    background: linear-gradient(135deg, var(--primary) 0%, #ff5e84 100%);
+    box-shadow: 0 0 15px rgba(225, 36, 84, 0.4);
+    border: none;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.hero-btn-red:hover {
+    box-shadow: 0 0 25px rgba(225, 36, 84, 0.6);
+    transform: translateY(-2px);
+}
+
+.hero-btn-outline {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.hero-btn-outline:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Overlapping Badges Layout */
+.overlapping-badges-card-wrapper {
+    position: relative;
+    z-index: 10;
+    margin-top: -60px; /* Negative margin to pull it UP overlapping the hero */
+    padding: 0 40px;
+    margin-bottom: 50px;
+}
+
+.overlapping-badges-card {
+    background: #ffffff;
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    padding: 30px 40px;
+    text-align: center;
+}
+
+.badges-card-title {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    text-transform: uppercase;
+}
+
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.badge-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.badge-icon-circle {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+}
+
+.pink-bg {
+    background-color: #ffeef2;
+    color: var(--primary);
+}
+
+.badge-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+/* General Sections styling */
+.landing-section {
+    padding: 60px 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    color: var(--secondary);
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.section-subtitle {
+    font-size: 15px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* Process cards */
+.process-flow-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.process-step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 30px 20px;
+    position: relative;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-smooth);
+}
+
+.process-step-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+}
+
+.step-badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 32px;
+    background: var(--primary);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 14px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid var(--body-bg);
+}
+
+.process-step-card h4 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    color: var(--secondary);
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 12px;
+}
+
+.process-step-card p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* Founder Styling */
+.founder-section {
+    background: var(--body-bg);
+}
+
+.founder-card-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.8fr;
+    gap: 40px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    align-items: center;
+}
+
+.founder-avatar-col {
+    height: 100%;
+    min-height: 350px;
+}
+
+.founder-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.founder-info-col {
+    padding: 40px;
+    text-align: left;
+}
+
+.founder-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: inline-block;
+}
+
+.founder-info-col h3 {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    color: var(--secondary);
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.founder-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 24px;
+}
+
+.founder-description {
+    font-size: 15px;
+    color: var(--text-main);
+    line-height: 1.7;
+    font-style: italic;
+    margin-bottom: 24px;
+}
+
+.founder-signature {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    color: var(--secondary);
+    font-weight: 700;
+}
+
+/* Testimonials Slide Cards */
+.testimonial-slide-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 40px 30px;
+    text-align: center;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+}
+
+.testimonial-quote-icon {
+    font-size: 36px;
+    color: var(--primary);
+    opacity: 0.15;
+    margin-bottom: 15px;
+}
+
+.testimonial-text {
+    font-size: 14px;
+    color: var(--text-main);
+    line-height: 1.7;
+    font-style: italic;
+    margin-bottom: 24px;
+}
+
+.testimonial-author {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.testimonial-author strong {
+    font-size: 14px;
+    color: var(--secondary);
+}
+
+.testimonial-author span {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
 
 
 
