@@ -1,0 +1,135 @@
+/* ==========================================
+   RESPONSIVE DESIGN BREAKPOINTS
+   ========================================== */
+
+/* Tablets and Landscape Mobiles (up to 768px) */
+@media screen and (max-width: 768px) {
+    .header__container {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .header__support {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .stepper {
+        margin-bottom: 30px;
+    }
+
+    .step-label {
+        font-size: 11px;
+    }
+
+    .form__card {
+        padding: 24px;
+        min-height: auto;
+    }
+
+    .step-header h2 {
+        font-size: 22px;
+    }
+
+    .input-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .shift-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .viral-toggles-container {
+        gap: 10px;
+    }
+
+    .viral-toggle-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 16px;
+    }
+
+    .toggle-btn-group {
+        width: 100%;
+    }
+
+    .btn-toggle {
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    .summary-layout {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .summary-receipt {
+        order: -1; /* Display summary at the top on mobile so patients can review quickly */
+    }
+
+    .trust-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .footer__container {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
+
+/* Small Mobiles (up to 480px) */
+@media screen and (max-width: 480px) {
+    main {
+        padding: 20px 0 40px;
+    }
+
+    .step-label {
+        display: none; /* Hide labels entirely on tiny screens to prevent overlapping */
+    }
+
+    .step-icon-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .step-progress-line {
+        top: 20px;
+        left: 20px;
+        right: 20px;
+    }
+
+    .step-header h2 {
+        font-size: 18px;
+    }
+
+    .success-screen h2 {
+        font-size: 24px;
+    }
+
+    .circle-outer {
+        width: 70px;
+        height: 70px;
+    }
+
+    .circle-inner {
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+    }
+
+    .next-steps-card {
+        padding: 16px;
+    }
+
+    .btn-primary, .btn-secondary {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
