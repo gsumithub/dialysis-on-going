@@ -198,5 +198,16 @@
     .b2b-step-info {
         margin-top: 2px;
     }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .about-narrative {
+        text-align: center;
+    }
 }
+
 

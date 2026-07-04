@@ -560,3 +560,60 @@ document.addEventListener("keydown", (e) => {
 init();
 updateStepperLayout();
 updateStepUI();
+
+// ==========================================
+// SCROLL-TRIGGERED STATS COUNTERS
+// ==========================================
+function initCounters() {
+    const counterElements = document.querySelectorAll(".counter-value");
+    if (counterElements.length === 0) return;
+
+    const countUp = (element) => {
+        const target = parseInt(element.getAttribute("data-target"), 10);
+        const duration = 2000; // 2 seconds animation duration
+        const startTime = performance.now();
+
+        const updateCount = (currentTime) => {
+            const elapsedTime = currentTime - startTime;
+            const progress = Math.min(elapsedTime / duration, 1);
+            
+            // Ease out quad formula
+            const easeProgress = progress * (2 - progress);
+            const currentValue = Math.floor(easeProgress * target);
+            
+            element.textContent = currentValue.toLocaleString();
+
+            if (progress < 1) {
+                requestAnimationFrame(updateCount);
+            } else {
+                element.textContent = target.toLocaleString();
+            }
+        };
+
+        requestAnimationFrame(updateCount);
+    };
+
+    const observerOptions = {
+        root: null,
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                countUp(entry.target);
+                observer.unobserve(entry.target); // Run only once
+            }
+        });
+    }, observerOptions);
+
+    counterElements.forEach(el => observer.observe(el));
+}
+
+// Call counters initiation
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCounters);
+} else {
+    initCounters();
+}
+
