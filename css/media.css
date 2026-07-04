@@ -10,10 +10,26 @@
         text-align: center;
     }
 
+    .header__brand {
+        flex-direction: column;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .brand-name {
+        font-size: 20px;
+    }
+
+    .brand-tagline {
+        font-size: 9px;
+        letter-spacing: 0.5px;
+    }
+
     .header__support {
         width: 100%;
         justify-content: center;
     }
+
 
     .stepper {
         margin-bottom: 30px;
