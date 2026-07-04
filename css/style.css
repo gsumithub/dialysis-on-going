@@ -1052,9 +1052,7 @@ input[type="number"]:focus {
    LANDING PAGE STYLING RULES
    ========================================== */
 .landing__container {
-    width: 90%;
-    max-width: 950px;
-    margin: 0 auto;
+    width: 100%;
     animation: fadeIn 0.8s ease forwards;
 }
 
@@ -1121,7 +1119,9 @@ input[type="number"]:focus {
 
 /* Splits CTA Section */
 .landing-splits-section {
-    margin-bottom: 50px;
+    width: 90%;
+    max-width: 950px;
+    margin: 0 auto 50px;
 }
 
 .splits-grid {
@@ -1218,12 +1218,14 @@ input[type="number"]:focus {
 
 /* Features Grid */
 .landing-features {
+    width: 90%;
+    max-width: 950px;
+    margin: 0 auto 40px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     border-top: 1px solid var(--border-color);
     padding-top: 40px;
-    margin-bottom: 40px;
 }
 
 .feature-item {
@@ -1281,10 +1283,11 @@ input[type="number"]:focus {
 
 /* About & Counters Section */
 .landing-about-section {
+    width: 90%;
+    max-width: 950px;
+    margin: 50px auto;
     border-top: 1px solid var(--border-color);
     padding-top: 50px;
-    margin-top: 50px;
-    margin-bottom: 50px;
 }
 
 .about-grid {
@@ -1426,7 +1429,7 @@ input[type="number"]:focus {
 /* Beach Hero Specific */
 .landing-hero {
     position: relative;
-    border-radius: var(--border-radius-md);
+    border-radius: 0px; /* Full viewport width has no border-radius */
     overflow: hidden;
     background-color: var(--secondary);
     background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80');
