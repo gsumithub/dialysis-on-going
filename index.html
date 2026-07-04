@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DialysisIsOnGoing | Travel Dialysis Booking Funnel</title>
+    <title>DialysisOnGo | Travel Dialysis Booking & Partner Funnel</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
             <div class="header__brand">
                 <i class="ph-bold ph-heartbeat logo-icon"></i>
                 <div class="header__text">
-                    <span class="brand-name">Dialysis<span>IsOnGoing</span></span>
+                    <span class="brand-name">Dialysis<span>OnGo</span></span>
                     <p class="brand-tagline">Dialysis Care Everywhere You Travel</p>
                 </div>
             </div>
@@ -37,6 +37,16 @@
 
     <main>
         <div class="funnel__container">
+            <!-- Flow Toggle Tabs -->
+            <div class="flow-tabs">
+                <button type="button" class="flow-tab-btn active" id="flow-patient-btn">
+                    <i class="ph-bold ph-user"></i> Patient Booking
+                </button>
+                <button type="button" class="flow-tab-btn" id="flow-clinic-btn">
+                    <i class="ph-bold ph-storefront"></i> List Your Clinic (B2B)
+                </button>
+            </div>
+
             <!-- Stepper Progress UI -->
             <div class="stepper">
                 <div class="step-progress-line">
@@ -44,31 +54,31 @@
                 </div>
                 
                 <div class="step-item active" data-step="1">
-                    <div class="step-icon-circle">
+                    <div class="step-icon-circle" id="step-circle-1">
                         <i class="ph-bold ph-map-pin"></i>
                     </div>
-                    <span class="step-label">Destination</span>
+                    <span class="step-label" id="step-label-1">Destination</span>
                 </div>
 
                 <div class="step-item" data-step="2">
-                    <div class="step-icon-circle">
+                    <div class="step-icon-circle" id="step-circle-2">
                         <i class="ph-bold ph-calendar-plus"></i>
                     </div>
-                    <span class="step-label">Care Details</span>
+                    <span class="step-label" id="step-label-2">Care Details</span>
                 </div>
 
                 <div class="step-item" data-step="3">
-                    <div class="step-icon-circle">
+                    <div class="step-icon-circle" id="step-circle-3">
                         <i class="ph-bold ph-shield-check"></i>
                     </div>
-                    <span class="step-label">Clinical Info</span>
+                    <span class="step-label" id="step-label-3">Clinical Info</span>
                 </div>
 
                 <div class="step-item" data-step="4">
-                    <div class="step-icon-circle">
+                    <div class="step-icon-circle" id="step-circle-4">
                         <i class="ph-bold ph-user-check"></i>
                     </div>
-                    <span class="step-label">Confirm</span>
+                    <span class="step-label" id="step-label-4">Confirm</span>
                 </div>
             </div>
 
@@ -77,279 +87,469 @@
                 <form id="funnel-form" novalidate>
                     
                     <!-- ==========================================
-                         STEP 1: DESTINATION & DATES
+                         PATIENT FLOW CONTENT
                          ========================================== -->
-                    <div class="step-content active" id="step-1-content">
-                        <div class="step-header">
-                            <h2>Where is your next journey taking you?</h2>
-                            <p>Select your travel destination and planned dates to find available verified care facilities.</p>
-                        </div>
-                        
-                        <div class="input-group">
-                            <label for="destination"><i class="ph-bold ph-map-pin-line"></i> Destination City</label>
-                            <div class="input-wrapper">
-                                <input type="text" id="destination" placeholder="e.g. Mumbai, New Delhi, Dubai, London..." required>
-                                <div class="input-icon-right"><i class="ph ph-magnifying-glass"></i></div>
+                    <div class="patient-flow-sections">
+                        <!-- STEP 1: DESTINATION & DATES -->
+                        <div class="step-content active" id="p-step-1">
+                            <div class="step-header">
+                                <h2>Where is your next journey taking you?</h2>
+                                <p>Select your travel destination and planned dates to find available verified care facilities.</p>
                             </div>
-                            <span class="error-message" id="dest-error">Please select a destination city.</span>
-                        </div>
-
-                        <div class="input-row">
-                            <div class="input-group">
-                                <label for="start-date"><i class="ph-bold ph-calendar-blank"></i> Travel Start Date</label>
-                                <input type="date" id="start-date" required>
-                                <span class="error-message" id="start-date-error">Select a valid start date.</span>
-                            </div>
-                            <div class="input-group">
-                                <label for="end-date"><i class="ph-bold ph-calendar-check"></i> Travel End Date</label>
-                                <input type="date" id="end-date" required>
-                                <span class="error-message" id="end-date-error">End date must be after start date.</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ==========================================
-                         STEP 2: TREATMENT DETAILS
-                         ========================================== -->
-                    <div class="step-content" id="step-2-content">
-                        <div class="step-header">
-                            <h2>Customize Your Treatment Schedule</h2>
-                            <p>Tell us your preferred dialysis routine so we can match you with local clinics.</p>
-                        </div>
-
-                        <!-- Shift Preference Grid -->
-                        <div class="input-group">
-                            <label><i class="ph-bold ph-clock"></i> Preferred Dialysis Shift</label>
-                            <div class="shift-grid">
-                                <div class="shift-card active" data-shift="Morning">
-                                    <div class="shift-card-header">
-                                        <i class="ph-bold ph-sun-horizon"></i>
-                                        <span>Morning</span>
-                                    </div>
-                                    <p class="shift-time">06:00 AM - 11:00 AM</p>
-                                </div>
-
-                                <div class="shift-card" data-shift="Afternoon">
-                                    <div class="shift-card-header">
-                                        <i class="ph-bold ph-sun"></i>
-                                        <span>Afternoon</span>
-                                    </div>
-                                    <p class="shift-time">11:00 AM - 04:00 PM</p>
-                                </div>
-
-                                <div class="shift-card" data-shift="Evening">
-                                    <div class="shift-card-header">
-                                        <i class="ph-bold ph-cloud-sun"></i>
-                                        <span>Evening</span>
-                                    </div>
-                                    <p class="shift-time">04:00 PM - 09:00 PM</p>
-                                </div>
-
-                                <div class="shift-card" data-shift="Night">
-                                    <div class="shift-card-header">
-                                        <i class="ph-bold ph-moon"></i>
-                                        <span>Night Shift</span>
-                                    </div>
-                                    <p class="shift-time">09:00 PM - 02:00 AM</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="input-row">
-                            <div class="input-group">
-                                <label for="sessions-frequency"><i class="ph-bold ph-hash"></i> Sessions per Week</label>
-                                <select id="sessions-frequency">
-                                    <option value="3 Sessions (Standard)" selected>3 Sessions per Week (Standard)</option>
-                                    <option value="2 Sessions">2 Sessions per Week</option>
-                                    <option value="4 Sessions">4 Sessions per Week</option>
-                                    <option value="Single Session">Single/Ad-hoc Session Only</option>
-                                </select>
-                            </div>
-
-                            <div class="input-group">
-                                <label for="dialyzer-preference"><i class="ph-bold ph-shield-star"></i> Dialyzer Preference</label>
-                                <select id="dialyzer-preference">
-                                    <option value="Single-Use Dialyzer" selected>Single-Use Dialyzer (Recommended)</option>
-                                    <option value="Multi-Use / Reusable">Multi-Use / Reusable Dialyzer</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ==========================================
-                         STEP 3: CLINICAL INFORMATION
-                         ========================================== -->
-                    <div class="step-content" id="step-3-content">
-                        <div class="step-header">
-                            <h2>Clinical Continuity Details</h2>
-                            <p>To safely match you with dedicated machinery, please provide your viral marker status.</p>
-                        </div>
-
-                        <!-- Viral Markers Row -->
-                        <div class="input-group">
-                            <label><i class="ph-bold ph-virus"></i> Viral Marker Status</label>
-                            <p class="sub-label">Does the patient carry any of the following viral markers?</p>
                             
-                            <div class="viral-toggles-container">
-                                <!-- HIV Toggle -->
-                                <div class="viral-toggle-card">
-                                    <span class="viral-name">HIV</span>
-                                    <div class="toggle-btn-group" id="hiv-toggle-group">
-                                        <button type="button" class="btn-toggle active" data-value="Negative">Negative</button>
-                                        <button type="button" class="btn-toggle text-alert" data-value="Positive">Positive</button>
-                                    </div>
+                            <div class="input-group">
+                                <label for="destination"><i class="ph-bold ph-map-pin-line"></i> Destination City</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="destination" placeholder="e.g. Mumbai, New Delhi, Dubai, London..." required>
+                                    <div class="input-icon-right"><i class="ph ph-magnifying-glass"></i></div>
                                 </div>
-
-                                <!-- HBV Toggle -->
-                                <div class="viral-toggle-card">
-                                    <span class="viral-name">Hepatitis B (HBV)</span>
-                                    <div class="toggle-btn-group" id="hbv-toggle-group">
-                                        <button type="button" class="btn-toggle active" data-value="Negative">Negative</button>
-                                        <button type="button" class="btn-toggle text-alert" data-value="Positive">Positive</button>
-                                    </div>
-                                </div>
-
-                                <!-- HCV Toggle -->
-                                <div class="viral-toggle-card">
-                                    <span class="viral-name">Hepatitis C (HCV)</span>
-                                    <div class="toggle-btn-group" id="hcv-toggle-group">
-                                        <button type="button" class="btn-toggle active" data-value="Negative">Negative</button>
-                                        <button type="button" class="btn-toggle text-alert" data-value="Positive">Positive</button>
-                                    </div>
-                                </div>
+                                <span class="error-message" id="dest-error">Please select a destination city.</span>
                             </div>
 
-                            <!-- Alert Box for Positive Markers -->
-                            <div class="viral-warning-box" id="viral-warning" style="display: none;">
-                                <i class="ph-bold ph-info"></i>
-                                <p><strong>Note:</strong> We fully support booking for viral-positive cases. We will match you exclusively with dialysis clinics equipped with dedicated, isolated machines for your safety and clinical standards.</p>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="start-date"><i class="ph-bold ph-calendar-blank"></i> Travel Start Date</label>
+                                    <input type="date" id="start-date" required>
+                                    <span class="error-message" id="start-date-error">Select a valid start date.</span>
+                                </div>
+                                <div class="input-group">
+                                    <label for="end-date"><i class="ph-bold ph-calendar-check"></i> Travel End Date</label>
+                                    <input type="date" id="end-date" required>
+                                    <span class="error-message" id="end-date-error">End date must be after start date.</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="input-row">
-                            <div class="input-group">
-                                <label for="blood-group"><i class="ph-bold ph-drop"></i> Patient Blood Group</label>
-                                <select id="blood-group">
-                                    <option value="A+">A Positive (A+)</option>
-                                    <option value="A-">A Negative (A-)</option>
-                                    <option value="B+" selected>B Positive (B+)</option>
-                                    <option value="B-">B Negative (B-)</option>
-                                    <option value="AB+">AB Positive (AB+)</option>
-                                    <option value="AB-">AB Negative (AB-)</option>
-                                    <option value="O+">O Positive (O+)</option>
-                                    <option value="O-">O Negative (O-)</option>
-                                    <option value="Unknown">Don't Know / Need Test</option>
-                                </select>
+                        <!-- STEP 2: TREATMENT DETAILS -->
+                        <div class="step-content" id="p-step-2">
+                            <div class="step-header">
+                                <h2>Customize Your Treatment Schedule</h2>
+                                <p>Tell us your preferred dialysis routine so we can match you with local clinics.</p>
                             </div>
 
                             <div class="input-group">
-                                <label for="clinical-handover"><i class="ph-bold ph-file-pdf"></i> Do you have latest medical reports?</label>
-                                <select id="clinical-handover">
-                                    <option value="Yes - Will share on WhatsApp/Email" selected>Yes, I will share them later</option>
-                                    <option value="No - Need guidance">No, I need assistance getting them ready</option>
-                                </select>
+                                <label><i class="ph-bold ph-clock"></i> Preferred Dialysis Shift</label>
+                                <div class="shift-grid">
+                                    <div class="shift-card active" data-shift="Morning">
+                                        <div class="shift-card-header">
+                                            <i class="ph-bold ph-sun-horizon"></i>
+                                            <span>Morning</span>
+                                        </div>
+                                        <p class="shift-time">06:00 AM - 11:00 AM</p>
+                                    </div>
+                                    <div class="shift-card" data-shift="Afternoon">
+                                        <div class="shift-card-header">
+                                            <i class="ph-bold ph-sun"></i>
+                                            <span>Afternoon</span>
+                                        </div>
+                                        <p class="shift-time">11:00 AM - 04:00 PM</p>
+                                    </div>
+                                    <div class="shift-card" data-shift="Evening">
+                                        <div class="shift-card-header">
+                                            <i class="ph-bold ph-cloud-sun"></i>
+                                            <span>Evening</span>
+                                        </div>
+                                        <p class="shift-time">04:00 PM - 09:00 PM</p>
+                                    </div>
+                                    <div class="shift-card" data-shift="Night">
+                                        <div class="shift-card-header">
+                                            <i class="ph-bold ph-moon"></i>
+                                            <span>Night Shift</span>
+                                        </div>
+                                        <p class="shift-time">09:00 PM - 02:00 AM</p>
+                                    </div>
+                                </div>
                             </div>
+
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="sessions-frequency"><i class="ph-bold ph-hash"></i> Sessions per Week</label>
+                                    <select id="sessions-frequency">
+                                        <option value="3 Sessions (Standard)" selected>3 Sessions per Week (Standard)</option>
+                                        <option value="2 Sessions">2 Sessions per Week</option>
+                                        <option value="4 Sessions">4 Sessions per Week</option>
+                                        <option value="Single Session">Single/Ad-hoc Session Only</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="dialyzer-preference"><i class="ph-bold ph-shield-star"></i> Dialyzer Preference</label>
+                                    <select id="dialyzer-preference">
+                                        <option value="Single-Use Dialyzer" selected>Single-Use Dialyzer (Recommended)</option>
+                                        <option value="Multi-Use / Reusable">Multi-Use / Reusable Dialyzer</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 3: CLINICAL INFORMATION -->
+                        <div class="step-content" id="p-step-3">
+                            <div class="step-header">
+                                <h2>Clinical Continuity Details</h2>
+                                <p>To safely match you with dedicated machinery, please provide your viral marker status.</p>
+                            </div>
+
+                            <div class="input-group">
+                                <label><i class="ph-bold ph-virus"></i> Viral Marker Status</label>
+                                <p class="sub-label">Does the patient carry any of the following viral markers?</p>
+                                
+                                <div class="viral-toggles-container">
+                                    <div class="viral-toggle-card">
+                                        <span class="viral-name">HIV</span>
+                                        <div class="toggle-btn-group" id="hiv-toggle-group">
+                                            <button type="button" class="btn-toggle active" data-value="Negative">Negative</button>
+                                            <button type="button" class="btn-toggle text-alert" data-value="Positive">Positive</button>
+                                        </div>
+                                    </div>
+                                    <div class="viral-toggle-card">
+                                        <span class="viral-name">Hepatitis B (HBV)</span>
+                                        <div class="toggle-btn-group" id="hbv-toggle-group">
+                                            <button type="button" class="btn-toggle active" data-value="Negative">Negative</button>
+                                            <button type="button" class="btn-toggle text-alert" data-value="Positive">Positive</button>
+                                        </div>
+                                    </div>
+                                    <div class="viral-toggle-card">
+                                        <span class="viral-name">Hepatitis C (HCV)</span>
+                                        <div class="toggle-btn-group" id="hcv-toggle-group">
+                                            <button type="button" class="btn-toggle active" data-value="Negative">Negative</button>
+                                            <button type="button" class="btn-toggle text-alert" data-value="Positive">Positive</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="viral-warning-box" id="viral-warning" style="display: none;">
+                                    <i class="ph-bold ph-info"></i>
+                                    <p><strong>Note:</strong> We fully support booking for viral-positive cases. We will match you exclusively with dialysis clinics equipped with dedicated, isolated machines for your safety and clinical standards.</p>
+                                </div>
+                            </div>
+
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="blood-group"><i class="ph-bold ph-drop"></i> Patient Blood Group</label>
+                                    <select id="blood-group">
+                                        <option value="A+">A Positive (A+)</option>
+                                        <option value="A-">A Negative (A-)</option>
+                                        <option value="B+" selected>B Positive (B+)</option>
+                                        <option value="B-">B Negative (B-)</option>
+                                        <option value="AB+">AB Positive (AB+)</option>
+                                        <option value="AB-">AB Negative (AB-)</option>
+                                        <option value="O+">O Positive (O+)</option>
+                                        <option value="O-">O Negative (O-)</option>
+                                        <option value="Unknown">Don't Know / Need Test</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="clinical-handover"><i class="ph-bold ph-file-pdf"></i> Do you have latest medical reports?</label>
+                                    <select id="clinical-handover">
+                                        <option value="Yes - Will share on WhatsApp/Email" selected>Yes, I will share them later</option>
+                                        <option value="No - Need guidance">No, I need assistance getting them ready</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 4: CONTACT & SUMMARY -->
+                        <div class="step-content" id="p-step-4">
+                            <div class="step-header">
+                                <h2>Contact Details &amp; Summary</h2>
+                                <p>Review your booking details and provide your contact information to reserve your slot.</p>
+                            </div>
+
+                            <div class="summary-layout">
+                                <div class="summary-fields">
+                                    <div class="input-group">
+                                        <label for="fullName"><i class="ph-bold ph-user"></i> Full Name <span class="required">*</span></label>
+                                        <input type="text" id="fullName" placeholder="e.g. Rajesh Sharma" required>
+                                        <span class="error-message" id="name-error">Please enter your full name.</span>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="phoneNumber"><i class="ph-bold ph-phone"></i> Phone Number <span class="required">*</span></label>
+                                        <input type="tel" id="phoneNumber" placeholder="e.g. +91 98765 43210" required>
+                                        <span class="error-message" id="phone-error">Please enter a valid phone number.</span>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="email"><i class="ph-bold ph-envelope"></i> Email Address</label>
+                                        <input type="email" id="email" placeholder="e.g. rajesh@example.com">
+                                        <span class="error-message" id="email-error">Please enter a valid email address.</span>
+                                    </div>
+                                </div>
+
+                                <div class="summary-receipt">
+                                    <h3>Booking Summary</h3>
+                                    <div class="receipt-body">
+                                        <div class="receipt-item">
+                                            <span class="label">Destination</span>
+                                            <strong class="value" id="summary-dest">-</strong>
+                                        </div>
+                                        <div class="receipt-item">
+                                            <span class="label">Planned Dates</span>
+                                            <strong class="value" id="summary-dates">-</strong>
+                                        </div>
+                                        <div class="receipt-item">
+                                            <span class="label">Routine</span>
+                                            <strong class="value" id="summary-routine">-</strong>
+                                        </div>
+                                        <div class="receipt-item">
+                                            <span class="label">Blood Group</span>
+                                            <strong class="value" id="summary-blood">-</strong>
+                                        </div>
+                                        <div class="receipt-item">
+                                            <span class="label">Viral Markers</span>
+                                            <strong class="value" id="summary-viral">Negative</strong>
+                                        </div>
+                                    </div>
+                                    <div class="receipt-badge">
+                                        <i class="ph-fill ph-shield-check"></i>
+                                        <span>DialysisOnGo Verified Matching</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SUCCESS SCREEN (PATIENT) -->
+                        <div class="success-screen" id="p-success-screen" style="display: none;">
+                            <div class="success-graphics">
+                                <div class="circle-outer">
+                                    <div class="circle-inner">
+                                        <i class="ph-bold ph-check"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <h2>Request Submitted Successfully!</h2>
+                            <p class="success-intro">Thank you for trusting DialysisOnGo. We've received your booking request for <strong id="success-dest">-</strong> and our care coordinators have started working on your match.</p>
+
+                            <div class="next-steps-card">
+                                <h3><i class="ph-bold ph-activity"></i> What happens next?</h3>
+                                <ol>
+                                    <li><strong>Verification:</strong> Our team will review the destination clinic listings within 4 hours.</li>
+                                    <li><strong>Contact:</strong> A care executive will call or message you on WhatsApp to request medical records.</li>
+                                    <li><strong>Slot Booking:</strong> We share reports securely and confirm your clinical slot before you pack your bags.</li>
+                                </ol>
+                            </div>
+
+                            <div class="founder-quote">
+                                <p class="quote-text">"A dialysis schedule should never mean a life put on hold. Travel with peace of mind. We maintain your clinical continuity seamlessly."</p>
+                                <div class="founder-info">
+                                    <span class="founder-name">Dr. O. P. Gupta</span>
+                                    <span class="founder-title">Founder, DialysisOnGo | Director of Nephrology, Paras Hospitals</span>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn-primary reset-flow-btn">Submit Another Booking</button>
                         </div>
                     </div>
 
                     <!-- ==========================================
-                         STEP 4: CONTACT & SUMMARY
+                         CLINIC B2B FLOW CONTENT
                          ========================================== -->
-                    <div class="step-content" id="step-4-content">
-                        <div class="step-header">
-                            <h2>Contact Details &amp; Summary</h2>
-                            <p>Review your booking details and provide your contact information to reserve your slot.</p>
-                        </div>
+                    <div class="clinic-flow-sections" style="display: none;">
+                        <!-- STEP 1: CLINIC PROFILE -->
+                        <div class="step-content" id="c-step-1">
+                            <div class="step-header">
+                                <h2>Partner with DialysisOnGo</h2>
+                                <p>Register your dialysis center to receive inquiries, increase machine utilization, and grow your occupancy.</p>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="clinic-name"><i class="ph-bold ph-hospital"></i> Clinic / Hospital Name <span class="required">*</span></label>
+                                <input type="text" id="clinic-name" placeholder="e.g. Apex Kidney Care, Gurgaon Center" required>
+                                <span class="error-message" id="c-name-error">Please enter the clinic name.</span>
+                            </div>
 
-                        <div class="summary-layout">
-                            <!-- Left: Contact Fields -->
-                            <div class="summary-fields">
+                            <div class="input-row">
                                 <div class="input-group">
-                                    <label for="fullName"><i class="ph-bold ph-user"></i> Full Name <span class="required">*</span></label>
-                                    <input type="text" id="fullName" placeholder="e.g. Rajesh Sharma" required>
-                                    <span class="error-message" id="name-error">Please enter your full name.</span>
+                                    <label for="clinic-city"><i class="ph-bold ph-map-pin"></i> City <span class="required">*</span></label>
+                                    <input type="text" id="clinic-city" placeholder="e.g. Gurgaon" required>
+                                    <span class="error-message" id="c-city-error">Please specify the city.</span>
                                 </div>
-
                                 <div class="input-group">
-                                    <label for="phoneNumber"><i class="ph-bold ph-phone"></i> Phone Number <span class="required">*</span></label>
-                                    <input type="tel" id="phoneNumber" placeholder="e.g. +91 98765 43210" required>
-                                    <span class="error-message" id="phone-error">Please enter a valid phone number.</span>
+                                    <label for="clinic-address"><i class="ph-bold ph-map-trifold"></i> Full Address <span class="required">*</span></label>
+                                    <input type="text" id="clinic-address" placeholder="e.g. Sector 43, Near Metro Station" required>
+                                    <span class="error-message" id="c-addr-error">Please enter the full address.</span>
                                 </div>
+                            </div>
+                        </div>
 
+                        <!-- STEP 2: MACHINE CAPACITY -->
+                        <div class="step-content" id="c-step-2">
+                            <div class="step-header">
+                                <h2>Machine Capacity &amp; Safety</h2>
+                                <p>Help us route the correct patients. Dedicated viral-isolation machines allow safe matches for viral-positive travelers.</p>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="clinic-total-machines"><i class="ph-bold ph-activity"></i> Total Active Dialysis Machines <span class="required">*</span></label>
+                                <input type="number" id="clinic-total-machines" min="1" placeholder="e.g. 12" required>
+                                <span class="error-message" id="c-total-error">Please enter active machine counts.</span>
+                            </div>
+
+                            <p class="sub-label" style="margin-bottom: 15px; font-weight: 700; color: var(--secondary);"><i class="ph-bold ph-virus"></i> Dedicated Isolation Machines (Enter 0 if none)</p>
+                            <div class="input-row" style="margin-bottom: 20px;">
                                 <div class="input-group">
-                                    <label for="email"><i class="ph-bold ph-envelope"></i> Email Address</label>
-                                    <input type="email" id="email" placeholder="e.g. rajesh@example.com">
-                                    <span class="error-message" id="email-error">Please enter a valid email address.</span>
+                                    <label for="clinic-hiv-machines">HIV Dedicated</label>
+                                    <input type="number" id="clinic-hiv-machines" min="0" value="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="clinic-hbv-machines">HBV Dedicated (Hep B)</label>
+                                    <input type="number" id="clinic-hbv-machines" min="0" value="0">
                                 </div>
                             </div>
-
-                            <!-- Right: Visual Summary Receipt -->
-                            <div class="summary-receipt">
-                                <h3>Booking Summary</h3>
-                                <div class="receipt-body">
-                                    <div class="receipt-item">
-                                        <span class="label">Destination</span>
-                                        <strong class="value" id="summary-dest">-</strong>
-                                    </div>
-                                    <div class="receipt-item">
-                                        <span class="label">Planned Dates</span>
-                                        <strong class="value" id="summary-dates">-</strong>
-                                    </div>
-                                    <div class="receipt-item">
-                                        <span class="label">Routine</span>
-                                        <strong class="value" id="summary-routine">-</strong>
-                                    </div>
-                                    <div class="receipt-item">
-                                        <span class="label">Blood Group</span>
-                                        <strong class="value" id="summary-blood">-</strong>
-                                    </div>
-                                    <div class="receipt-item">
-                                        <span class="label">Viral Markers</span>
-                                        <strong class="value" id="summary-viral">Negative</strong>
-                                    </div>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <label for="clinic-hcv-machines">HCV Dedicated (Hep C)</label>
+                                    <input type="number" id="clinic-hcv-machines" min="0" value="0">
                                 </div>
-                                <div class="receipt-badge">
-                                    <i class="ph-fill ph-shield-check"></i>
-                                    <span>DialysisOnGo Verified Matching</span>
+                                <div class="input-group">
+                                    <label for="clinic-dialyzer-policy">Dialyzer Reuse Policy</label>
+                                    <select id="clinic-dialyzer-policy">
+                                        <option value="Single-Use Only" selected>Single-Use Only (No Reuse)</option>
+                                        <option value="Supports Reuse / Multi-Use">Supports Reuse / Multi-Use</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- ==========================================
-                         SUCCESS SCREEN
-                         ========================================== -->
-                    <div class="success-screen" id="success-screen" style="display: none;">
-                        <div class="success-graphics">
-                            <div class="circle-outer">
-                                <div class="circle-inner">
-                                    <i class="ph-bold ph-check"></i>
+                        <!-- STEP 3: ACCREDITATION & CO-PAY -->
+                        <div class="step-content" id="c-step-3">
+                            <div class="step-header">
+                                <h2>Quality &amp; Compliance Badges</h2>
+                                <p>Select your accreditations. Verified badges build trust and attract premium patients.</p>
+                            </div>
+
+                            <div class="input-group">
+                                <label><i class="ph-bold ph-certificate"></i> Center Quality Accreditations</label>
+                                <div class="shift-grid">
+                                    <div class="shift-card active" data-badge="NABH">
+                                        <div class="shift-card-header">
+                                            <i class="ph-bold ph-award"></i>
+                                            <span>NABH Accredited</span>
+                                        </div>
+                                        <p class="shift-time">National Accreditation Board</p>
+                                    </div>
+                                    <div class="shift-card" data-badge="JCI">
+                                        <div class="shift-card-header">
+                                            <i class="ph-bold ph-globe"></i>
+                                            <span>JCI Accredited</span>
+                                        </div>
+                                        <p class="shift-time">Joint Commission International</p>
+                                    </div>
+                                    <div class="shift-card" data-badge="State Verified">
+                                        <div class="shift-card-header">
+                                            <i class="ph-bold ph-shield-check"></i>
+                                            <span>Verified Partner</span>
+                                        </div>
+                                        <p class="shift-time">State Board Health compliance</p>
+                                    </div>
+                                    <div class="shift-card" data-badge="None">
+                                        <div class="shift-card-header">
+                                            <i class="ph-bold ph-check-square"></i>
+                                            <span>Standard Clinic</span>
+                                        </div>
+                                        <p class="shift-time">Standard medical clearances</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <h2>Request Submitted Successfully!</h2>
-                        <p class="success-intro">Thank you for trusting DialysisOnGo. We've received your booking request for <strong id="success-dest">-</strong> and our care coordinators have started working on your match.</p>
 
-                        <div class="next-steps-card">
-                            <h3><i class="ph-bold ph-activity"></i> What happens next?</h3>
-                            <ol>
-                                <li><strong>Verification:</strong> Our team will review the destination clinic listings within 4 hours.</li>
-                                <li><strong>Contact:</strong> A care executive will call or message you on WhatsApp to request medical records.</li>
-                                <li><strong>Slot Booking:</strong> We share reports securely and confirm your clinical slot before you pack your bags.</li>
-                            </ol>
-                        </div>
+                        <!-- STEP 4: CONTACT & REGISTRATION REVIEW -->
+                        <div class="step-content" id="c-step-4">
+                            <div class="step-header">
+                                <h2>Primary Coordinator &amp; Summary</h2>
+                                <p>Provide details for the center HOD or Manager to activate your verified badge.</p>
+                            </div>
 
-                        <!-- Founder Reassurance Quote -->
-                        <div class="founder-quote">
-                            <p class="quote-text">"A dialysis schedule should never mean a life put on hold. Travel with peace of mind. We maintain your clinical continuity seamlessly."</p>
-                            <div class="founder-info">
-                                <span class="founder-name">Dr. O. P. Gupta</span>
-                                <span class="founder-title">Founder, DialysisOnGo | Director of Nephrology, Paras Hospitals</span>
+                            <div class="summary-layout">
+                                <div class="summary-fields">
+                                    <div class="input-group">
+                                        <label for="clinic-manager"><i class="ph-bold ph-user"></i> Contact Person (HOD/Manager) <span class="required">*</span></label>
+                                        <input type="text" id="clinic-manager" placeholder="e.g. Dr. Ramesh Kumar" required>
+                                        <span class="error-message" id="c-manager-error">Please enter the manager name.</span>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="clinic-phone"><i class="ph-bold ph-phone"></i> Mobile Number <span class="required">*</span></label>
+                                        <input type="tel" id="clinic-phone" placeholder="e.g. +91 99999 88888" required>
+                                        <span class="error-message" id="c-phone-error">Please enter a valid mobile number.</span>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="clinic-email"><i class="ph-bold ph-envelope"></i> Business Email <span class="required">*</span></label>
+                                        <input type="email" id="clinic-email" placeholder="e.g. center@dialysis.com" required>
+                                        <span class="error-message" id="c-email-error">Please enter a valid email.</span>
+                                    </div>
+                                </div>
+
+                                <div class="summary-receipt">
+                                    <h3>Partner Application</h3>
+                                    <div class="receipt-body">
+                                        <div class="receipt-item">
+                                            <span class="label">Center Name</span>
+                                            <strong class="value" id="summary-c-name">-</strong>
+                                        </div>
+                                        <div class="receipt-item">
+                                            <span class="label">Location</span>
+                                            <strong class="value" id="summary-c-loc">-</strong>
+                                        </div>
+                                        <div class="receipt-item">
+                                            <span class="label">Active Machines</span>
+                                            <strong class="value" id="summary-c-machines">-</strong>
+                                        </div>
+                                        <div class="receipt-item">
+                                            <span class="label">Accreditation</span>
+                                            <strong class="value" id="summary-c-badge">NABH</strong>
+                                        </div>
+                                    </div>
+                                    <div class="receipt-badge">
+                                        <i class="ph-fill ph-storefront"></i>
+                                        <span>B2B Growth Provider</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <button type="button" class="btn-primary" id="reset-funnel-btn">Submit Another Booking</button>
+                        <!-- SUCCESS SCREEN (CLINIC DASHBOARD MOCKUP) -->
+                        <div class="success-screen" id="c-success-screen" style="display: none;">
+                            <div class="success-graphics">
+                                <div class="circle-outer" style="background-color: var(--primary-light);">
+                                    <div class="circle-inner" style="background-color: var(--primary);">
+                                        <i class="ph-bold ph-storefront"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <h2>Welcome, Partner! Dashboard Activated</h2>
+                            <p class="success-intro">Your center <strong id="success-clinic-title">-</strong> is now listed under DialysisOnGo's verified directory. Your B2B inquiry pipeline is active.</p>
+
+                            <!-- 5-Step Process Tracker Widget matching PDF Page 2 -->
+                            <div class="b2b-tracker-card">
+                                <h3><i class="ph-bold ph-shuffle"></i> Your Operational Lifecycle (How it works)</h3>
+                                <div class="b2b-steps-row">
+                                    <div class="b2b-step active">
+                                        <div class="b2b-step-num">1</div>
+                                        <span class="b2b-step-title">Get Inquiries</span>
+                                        <p class="b2b-step-info">Patients request slots</p>
+                                    </div>
+                                    <div class="b2b-step">
+                                        <div class="b2b-step-num">2</div>
+                                        <span class="b2b-step-title">Received</span>
+                                        <p class="b2b-step-info">Request arrives</p>
+                                    </div>
+                                    <div class="b2b-step">
+                                        <div class="b2b-step-num">3</div>
+                                        <span class="b2b-step-title">Confirmed</span>
+                                        <p class="b2b-step-info">HOD locks slot</p>
+                                    </div>
+                                    <div class="b2b-step">
+                                        <div class="b2b-step-num">4</div>
+                                        <span class="b2b-step-title">Visit</span>
+                                        <p class="b2b-step-info">Patient gets treated</p>
+                                    </div>
+                                    <div class="b2b-step">
+                                        <div class="b2b-step-num">5</div>
+                                        <span class="b2b-step-title">Completed</span>
+                                        <p class="b2b-step-info">Session completed</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn-primary reset-flow-btn">Register Another Center</button>
+                        </div>
                     </div>
 
                     <!-- Funnel Actions Navigation Buttons -->
@@ -398,9 +598,9 @@
     <footer>
         <div class="footer__container">
             <div class="footer__brand">
-                <i class="ph-bold ph-heartbeat"></i> DialysisIsOnGoing
+                <i class="ph-bold ph-heartbeat"></i> DialysisOnGo
             </div>
-            <p>&copy; 2026 DialysisIsOnGoing. Created with care for clinical travelers. All rights reserved.</p>
+            <p>&copy; 2026 DialysisOnGo. Created with care for clinical travelers. All rights reserved.</p>
         </div>
     </footer>
 

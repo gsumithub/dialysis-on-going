@@ -1,10 +1,12 @@
 // ==========================================
 // FUNNEL STATE MANAGEMENT
 // ==========================================
-let currentStep = 1;
+let activeFlow = "patient"; // "patient" or "clinic"
+let patientStep = 1;
+let clinicStep = 1;
 const TOTAL_STEPS = 4;
 
-const formData = {
+const patientData = {
     destination: "",
     startDate: "",
     endDate: "",
@@ -21,58 +23,114 @@ const formData = {
     email: ""
 };
 
+const clinicData = {
+    name: "",
+    city: "",
+    address: "",
+    totalMachines: "",
+    hivMachines: 0,
+    hbvMachines: 0,
+    hcvMachines: 0,
+    dialyzerPolicy: "Single-Use Only",
+    badge: "NABH",
+    manager: "",
+    phone: "",
+    email: ""
+};
+
+// Stepper Configuration
+const STEPPER_CONFIG = {
+    patient: {
+        labels: ["Destination", "Care Details", "Clinical Info", "Confirm"],
+        icons: ["ph-bold ph-map-pin", "ph-bold ph-calendar-plus", "ph-bold ph-shield-check", "ph-bold ph-user-check"]
+    },
+    clinic: {
+        labels: ["Profile", "Capacity", "Accreditation", "Confirm"],
+        icons: ["ph-bold ph-hospital", "ph-bold ph-activity", "ph-bold ph-certificate", "ph-bold ph-storefront"]
+    }
+};
+
 // ==========================================
 // DOM ELEMENTS
 // ==========================================
-const stepContents = [
-    document.getElementById("step-1-content"),
-    document.getElementById("step-2-content"),
-    document.getElementById("step-3-content"),
-    document.getElementById("step-4-content")
-];
+const flowPatientBtn = document.getElementById("flow-patient-btn");
+const flowClinicBtn = document.getElementById("flow-clinic-btn");
+const patientSections = document.querySelector(".patient-flow-sections");
+const clinicSections = document.querySelector(".clinic-flow-sections");
 
-const stepperItems = document.querySelectorAll(".step-item");
 const progressFill = document.getElementById("progress-fill");
-
 const nextBtn = document.getElementById("next-btn");
 const backBtn = document.getElementById("back-btn");
 const funnelActionsRow = document.getElementById("funnel-actions-row");
-const successScreen = document.getElementById("success-screen");
-const resetBtn = document.getElementById("reset-funnel-btn");
 
-// Input Elements
+// Stepper nodes
+const stepCircles = [
+    document.getElementById("step-circle-1"),
+    document.getElementById("step-circle-2"),
+    document.getElementById("step-circle-3"),
+    document.getElementById("step-circle-4")
+];
+const stepLabels = [
+    document.getElementById("step-label-1"),
+    document.getElementById("step-label-2"),
+    document.getElementById("step-label-3"),
+    document.getElementById("step-label-4")
+];
+
+// Patient Input Elements
 const destInput = document.getElementById("destination");
 const startDateInput = document.getElementById("start-date");
 const endDateInput = document.getElementById("end-date");
-const shiftCards = document.querySelectorAll(".shift-card");
+const shiftCards = document.querySelectorAll(".shift-card[data-shift]");
 const freqSelect = document.getElementById("sessions-frequency");
 const dialyzerSelect = document.getElementById("dialyzer-preference");
 const bloodSelect = document.getElementById("blood-group");
 const reportsSelect = document.getElementById("clinical-handover");
-const nameInput = document.getElementById("fullName");
-const phoneInput = document.getElementById("phoneNumber");
-const emailInput = document.getElementById("email");
-
-// Warnings & Summary Elements
+const pNameInput = document.getElementById("fullName");
+const pPhoneInput = document.getElementById("phoneNumber");
+const pEmailInput = document.getElementById("email");
 const viralWarningBox = document.getElementById("viral-warning");
+
+// Clinic Input Elements
+const cNameInput = document.getElementById("clinic-name");
+const cCityInput = document.getElementById("clinic-city");
+const cAddrInput = document.getElementById("clinic-address");
+const cTotalInput = document.getElementById("clinic-total-machines");
+const cIhivInput = document.getElementById("clinic-hiv-machines");
+const cIhbvInput = document.getElementById("clinic-hbv-machines");
+const cIhcvInput = document.getElementById("clinic-hcv-machines");
+const cPolicySelect = document.getElementById("clinic-dialyzer-policy");
+const cBadgeCards = document.querySelectorAll(".shift-card[data-badge]");
+const cManagerInput = document.getElementById("clinic-manager");
+const cPhoneInput = document.getElementById("clinic-phone");
+const cEmailInput = document.getElementById("clinic-email");
+
+// Summary & Success Outputs
 const summaryDest = document.getElementById("summary-dest");
 const summaryDates = document.getElementById("summary-dates");
 const summaryRoutine = document.getElementById("summary-routine");
 const summaryBlood = document.getElementById("summary-blood");
 const summaryViral = document.getElementById("summary-viral");
 const successDestText = document.getElementById("success-dest");
+const pSuccessScreen = document.getElementById("p-success-screen");
+
+const summaryCName = document.getElementById("summary-c-name");
+const summaryCLoc = document.getElementById("summary-c-loc");
+const summaryCMachines = document.getElementById("summary-c-machines");
+const summaryCBadge = document.getElementById("summary-c-badge");
+const successClinicTitle = document.getElementById("success-clinic-title");
+const cSuccessScreen = document.getElementById("c-success-screen");
 
 // ==========================================
-// INITIAL SETUP & DATE BOUNDS
+// INITIAL SETUP
 // ==========================================
 function init() {
-    // Set min date of travel starting tomorrow
+    // 1. Patient dates config
     const today = new Date();
     today.setDate(today.getDate() + 1);
     const tomorrowStr = today.toISOString().split('T')[0];
     startDateInput.min = tomorrowStr;
     
-    // Default dates (travel starting in 7 days, lasting for 7 days)
     const startDefault = new Date();
     startDefault.setDate(startDefault.getDate() + 7);
     startDateInput.value = startDefault.toISOString().split('T')[0];
@@ -82,7 +140,6 @@ function init() {
     endDateInput.value = endDefault.toISOString().split('T')[0];
     endDateInput.min = startDateInput.value;
 
-    // Date bounds changes
     startDateInput.addEventListener("change", () => {
         endDateInput.min = startDateInput.value;
         if (endDateInput.value && endDateInput.value < startDateInput.value) {
@@ -90,25 +147,42 @@ function init() {
         }
     });
 
-    // Setup interactive shift cards selection
+    // 2. Patient Shifts selector
     shiftCards.forEach(card => {
         card.addEventListener("click", () => {
             shiftCards.forEach(c => c.classList.remove("active"));
             card.classList.add("active");
-            formData.shift = card.getAttribute("data-shift");
+            patientData.shift = card.getAttribute("data-shift");
         });
     });
 
-    // Setup viral toggle button pairs
-    setupViralToggle("hiv-toggle-group", (val) => { formData.hivStatus = val; checkViralWarningState(); });
-    setupViralToggle("hbv-toggle-group", (val) => { formData.hbvStatus = val; checkViralWarningState(); });
-    setupViralToggle("hcv-toggle-group", (val) => { formData.hcvStatus = val; checkViralWarningState(); });
+    // 3. Patient Viral toggles
+    setupViralToggle("hiv-toggle-group", (val) => { patientData.hivStatus = val; checkViralWarningState(); });
+    setupViralToggle("hbv-toggle-group", (val) => { patientData.hbvStatus = val; checkViralWarningState(); });
+    setupViralToggle("hcv-toggle-group", (val) => { patientData.hcvStatus = val; checkViralWarningState(); });
 
-    // Hook validation triggers to clear errors on typing
+    // 4. Clinic badges selector
+    cBadgeCards.forEach(card => {
+        card.addEventListener("click", () => {
+            cBadgeCards.forEach(c => c.classList.remove("active"));
+            card.classList.add("active");
+            clinicData.badge = card.getAttribute("data-badge");
+        });
+    });
+
+    // 5. Flow switching listeners
+    flowPatientBtn.addEventListener("click", () => switchFlow("patient"));
+    flowClinicBtn.addEventListener("click", () => switchFlow("clinic"));
+
+    // 6. Reset listeners
+    document.querySelectorAll(".reset-flow-btn").forEach(btn => {
+        btn.addEventListener("click", resetFunnel);
+    });
+
+    // 7. Clear error outlines on input
     setupClearErrorsOnInput();
 }
 
-// Helper to configure viral toggle button events
 function setupViralToggle(groupId, stateCallback) {
     const group = document.getElementById(groupId);
     const buttons = group.querySelectorAll(".btn-toggle");
@@ -122,119 +196,136 @@ function setupViralToggle(groupId, stateCallback) {
 }
 
 function checkViralWarningState() {
-    if (formData.hivStatus === "Positive" || formData.hbvStatus === "Positive" || formData.hcvStatus === "Positive") {
+    if (patientData.hivStatus === "Positive" || patientData.hbvStatus === "Positive" || patientData.hcvStatus === "Positive") {
         viralWarningBox.style.display = "flex";
     } else {
         viralWarningBox.style.display = "none";
     }
 }
 
-// Clear error outlines when editing
 function setupClearErrorsOnInput() {
     const inputsWithErrors = [
-        { elem: destInput, containerId: "dest-error" },
-        { elem: startDateInput, containerId: "start-date-error" },
-        { elem: endDateInput, containerId: "end-date-error" },
-        { elem: nameInput, containerId: "name-error" },
-        { elem: phoneInput, containerId: "phone-error" },
-        { elem: emailInput, containerId: "email-error" }
+        destInput, startDateInput, endDateInput, pNameInput, pPhoneInput, pEmailInput,
+        cNameInput, cCityInput, cAddrInput, cTotalInput, cManagerInput, cPhoneInput, cEmailInput
     ];
-
-    inputsWithErrors.forEach(item => {
-        item.elem.addEventListener("input", () => {
-            item.elem.closest(".input-group").classList.remove("invalid");
-        });
+    inputsWithErrors.forEach(input => {
+        if (input) {
+            input.addEventListener("input", () => {
+                input.closest(".input-group").classList.remove("invalid");
+            });
+        }
     });
 }
 
 // ==========================================
-// FORM VALIDATIONS
+// FLOW SWITCHING
 // ==========================================
-function validateStep(step) {
+function switchFlow(flow) {
+    if (activeFlow === flow) return;
+    activeFlow = flow;
+
+    if (flow === "patient") {
+        flowPatientBtn.classList.add("active");
+        flowClinicBtn.classList.remove("active");
+        patientSections.style.display = "block";
+        clinicSections.style.display = "none";
+    } else {
+        flowPatientBtn.classList.remove("active");
+        flowClinicBtn.classList.add("active");
+        patientSections.style.display = "none";
+        clinicSections.style.display = "block";
+    }
+
+    updateStepperLayout();
+    updateStepUI();
+}
+
+function updateStepperLayout() {
+    const config = STEPPER_CONFIG[activeFlow];
+    stepCircles.forEach((circle, index) => {
+        circle.innerHTML = `<i class="${config.icons[index]}"></i>`;
+    });
+    stepLabels.forEach((label, index) => {
+        label.textContent = config.labels[index];
+    });
+}
+
+// ==========================================
+// VALIDATIONS
+// ==========================================
+function validateCurrentStep() {
     let isValid = true;
+    const step = activeFlow === "patient" ? patientStep : clinicStep;
 
-    if (step === 1) {
-        // Destination check
-        if (!destInput.value.trim()) {
-            showError(destInput, "dest-error");
-            isValid = false;
-        }
-
-        // Start Date check
-        if (!startDateInput.value) {
-            showError(startDateInput, "start-date-error");
-            isValid = false;
-        }
-
-        // End Date check
-        if (!endDateInput.value || endDateInput.value < startDateInput.value) {
-            showError(endDateInput, "end-date-error");
-            isValid = false;
+    if (activeFlow === "patient") {
+        if (step === 1) {
+            if (!destInput.value.trim()) { showError(destInput); isValid = false; }
+            if (!startDateInput.value) { showError(startDateInput); isValid = false; }
+            if (!endDateInput.value || endDateInput.value < startDateInput.value) { showError(endDateInput); isValid = false; }
+        } 
+        else if (step === 4) {
+            if (!pNameInput.value.trim() || pNameInput.value.trim().length < 2) { showError(pNameInput); isValid = false; }
+            const cleanPhone = pPhoneInput.value.replace(/[^0-9+]/g, '');
+            if (!cleanPhone || cleanPhone.length < 8) { showError(pPhoneInput); isValid = false; }
+            if (pEmailInput.value.trim()) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(pEmailInput.value.trim())) { showError(pEmailInput); isValid = false; }
+            }
         }
     } 
-    else if (step === 4) {
-        // Full Name check
-        if (!nameInput.value.trim() || nameInput.value.trim().length < 2) {
-            showError(nameInput, "name-error");
-            isValid = false;
+    else { // Clinic Flow Validation
+        if (step === 1) {
+            if (!cNameInput.value.trim()) { showError(cNameInput); isValid = false; }
+            if (!cCityInput.value.trim()) { showError(cCityInput); isValid = false; }
+            if (!cAddrInput.value.trim()) { showError(cAddrInput); isValid = false; }
+        } 
+        else if (step === 2) {
+            if (!cTotalInput.value || parseInt(cTotalInput.value) < 1) { showError(cTotalInput); isValid = false; }
         }
-
-        // Phone check (basic check: digits length 10-15)
-        const cleanPhone = phoneInput.value.replace(/[^0-9+]/g, '');
-        if (!cleanPhone || cleanPhone.length < 8) {
-            showError(phoneInput, "phone-error");
-            isValid = false;
-        }
-
-        // Email check (optional but regex validation if filled)
-        if (emailInput.value.trim()) {
+        else if (step === 4) {
+            if (!cManagerInput.value.trim()) { showError(cManagerInput); isValid = false; }
+            const cleanPhone = cPhoneInput.value.replace(/[^0-9+]/g, '');
+            if (!cleanPhone || cleanPhone.length < 8) { showError(cPhoneInput); isValid = false; }
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(emailInput.value.trim())) {
-                showError(emailInput, "email-error");
-                isValid = false;
-            }
+            if (!cEmailInput.value.trim() || !emailRegex.test(cEmailInput.value.trim())) { showError(cEmailInput); isValid = false; }
         }
     }
 
     return isValid;
 }
 
-function showError(inputElement, errorId) {
-    inputElement.closest(".input-group").classList.add("invalid");
+function showError(element) {
+    element.closest(".input-group").classList.add("invalid");
 }
 
 // ==========================================
-// NAVIGATION HANDLERS
+// STEPS NAVIGATION & RENDER
 // ==========================================
 function updateStepUI() {
-    // Show/Hide steps
-    stepContents.forEach((content, index) => {
-        if (index + 1 === currentStep) {
-            content.classList.add("active");
-        } else {
-            content.classList.remove("active");
-        }
-    });
+    const step = activeFlow === "patient" ? patientStep : clinicStep;
 
-    // Update Stepper badges and progress bar
-    stepperItems.forEach((item, index) => {
-        const itemStep = index + 1;
-        if (itemStep === currentStep) {
-            item.className = "step-item active";
-        } else if (itemStep < currentStep) {
-            item.className = "step-item completed";
+    // Toggle active content divs
+    const selectorPrefix = activeFlow === "patient" ? "p-step-" : "c-step-";
+    for (let i = 1; i <= TOTAL_STEPS; i++) {
+        const section = document.getElementById(`${selectorPrefix}${i}`);
+        if (i === step) {
+            section.classList.add("active");
         } else {
-            item.className = "step-item";
+            section.classList.remove("active");
         }
-    });
+    }
 
-    const percent = ((currentStep - 1) / (TOTAL_STEPS - 1)) * 100;
+    // Update stepper badges
+    stepperItemsActive(step);
+
+    // Update progress fill
+    const percent = ((step - 1) / (TOTAL_STEPS - 1)) * 100;
     progressFill.style.width = `${percent}%`;
 
-    // Action button state modifications
-    backBtn.disabled = currentStep === 1;
+    // Configure nav buttons disabled states
+    backBtn.disabled = step === 1;
 
-    if (currentStep === TOTAL_STEPS) {
+    if (step === TOTAL_STEPS) {
         nextBtn.innerHTML = `Confirm &amp; Submit <i class="ph-bold ph-paper-plane"></i>`;
         populateSummaryReceipt();
     } else {
@@ -242,115 +333,158 @@ function updateStepUI() {
     }
 }
 
-// Compile inputs into state and render receipt
+function stepperItemsActive(activeStep) {
+    stepperItems = document.querySelectorAll(".step-item");
+    stepperItems.forEach((item, index) => {
+        const itemStep = index + 1;
+        if (itemStep === activeStep) {
+            item.className = "step-item active";
+        } else if (itemStep < activeStep) {
+            item.className = "step-item completed";
+        } else {
+            item.className = "step-item";
+        }
+    });
+}
+
+// Gather summary choices
 function populateSummaryReceipt() {
-    formData.destination = destInput.value.trim();
-    formData.startDate = startDateInput.value;
-    formData.endDate = endDateInput.value;
-    formData.frequency = freqSelect.value;
-    formData.dialyzer = dialyzerSelect.value;
-    formData.bloodGroup = bloodSelect.value;
-    formData.reportsAvailable = reportsSelect.value;
-    formData.fullName = nameInput.value.trim();
-    formData.phone = phoneInput.value.trim();
-    formData.email = emailInput.value.trim();
+    if (activeFlow === "patient") {
+        patientData.destination = destInput.value.trim();
+        patientData.startDate = startDateInput.value;
+        patientData.endDate = endDateInput.value;
+        patientData.frequency = freqSelect.value;
+        patientData.dialyzer = dialyzerSelect.value;
+        patientData.bloodGroup = bloodSelect.value;
+        patientData.reportsAvailable = reportsSelect.value;
+        patientData.fullName = pNameInput.value.trim();
+        patientData.phone = pPhoneInput.value.trim();
+        patientData.email = pEmailInput.value.trim();
 
-    // Set text contents
-    summaryDest.textContent = formData.destination;
-    
-    // Dates formatting
-    const options = { month: 'short', day: 'numeric', year: 'numeric' };
-    const sDate = new Date(formData.startDate).toLocaleDateString('en-US', options);
-    const eDate = new Date(formData.endDate).toLocaleDateString('en-US', options);
-    summaryDates.textContent = `${sDate} - ${eDate}`;
+        summaryDest.textContent = patientData.destination;
+        const options = { month: 'short', day: 'numeric', year: 'numeric' };
+        const sDate = new Date(patientData.startDate).toLocaleDateString('en-US', options);
+        const eDate = new Date(patientData.endDate).toLocaleDateString('en-US', options);
+        summaryDates.textContent = `${sDate} - ${eDate}`;
+        summaryRoutine.textContent = `${patientData.frequency} (${patientData.shift})`;
+        summaryBlood.textContent = patientData.bloodGroup;
 
-    summaryRoutine.textContent = `${formData.frequency} (${formData.shift})`;
-    summaryBlood.textContent = `${formData.bloodGroup}`;
+        const positives = [];
+        if (patientData.hivStatus === "Positive") positives.push("HIV");
+        if (patientData.hbvStatus === "Positive") positives.push("HBV");
+        if (patientData.hcvStatus === "Positive") positives.push("HCV");
 
-    // Viral Status compile
-    const positives = [];
-    if (formData.hivStatus === "Positive") positives.push("HIV");
-    if (formData.hbvStatus === "Positive") positives.push("HBV");
-    if (formData.hcvStatus === "Positive") positives.push("HCV");
+        if (positives.length > 0) {
+            summaryViral.textContent = `Positive (${positives.join(", ")})`;
+            summaryViral.style.color = "var(--primary)";
+        } else {
+            summaryViral.textContent = "Negative (All)";
+            summaryViral.style.color = "var(--success)";
+        }
+    } 
+    else { // Clinic Flow
+        clinicData.name = cNameInput.value.trim();
+        clinicData.city = cCityInput.value.trim();
+        clinicData.address = cAddrInput.value.trim();
+        clinicData.totalMachines = cTotalInput.value;
+        clinicData.hivMachines = cIhivInput.value;
+        clinicData.hbvMachines = cIhbvInput.value;
+        clinicData.hcvMachines = cIhcvInput.value;
+        clinicData.dialyzerPolicy = cPolicySelect.value;
+        clinicData.manager = cManagerInput.value.trim();
+        clinicData.phone = cPhoneInput.value.trim();
+        clinicData.email = cEmailInput.value.trim();
 
-    if (positives.length > 0) {
-        summaryViral.textContent = `Positive (${positives.join(", ")})`;
-        summaryViral.className = "value text-alert";
-        summaryViral.style.color = "var(--primary)";
-    } else {
-        summaryViral.textContent = "Negative (All)";
-        summaryViral.className = "value";
-        summaryViral.style.color = "var(--success)";
+        summaryCName.textContent = clinicData.name;
+        summaryCLoc.textContent = `${clinicData.city}, Address: ${clinicData.address}`;
+        summaryCMachines.textContent = `${clinicData.totalMachines} Machines (HIV: ${clinicData.hivMachines}, HBV: ${clinicData.hbvMachines}, HCV: ${clinicData.hcvMachines})`;
+        summaryCBadge.textContent = `${clinicData.badge} (${clinicData.dialyzerPolicy})`;
     }
 }
 
-// Submit data
-function submitBooking() {
-    // Show spinner in submit button
+// Submit action
+function submitForm() {
     nextBtn.disabled = true;
-    nextBtn.innerHTML = `<i class="ph-bold ph-circle-notch fa-spin"></i> Submitting Request...`;
+    nextBtn.innerHTML = `<i class="ph-bold ph-circle-notch fa-spin"></i> Submitting...`;
 
-    // Simulate API delay
     setTimeout(() => {
-        // Set success texts
-        successDestText.textContent = formData.destination;
-
-        // Hide form and action controls
-        stepContents.forEach(c => c.style.display = "none");
-        funnelActionsRow.style.display = "none";
-        
-        // Mark stepper final state
-        stepperItems.forEach(item => item.className = "step-item completed");
+        // Mark all steps complete
+        document.querySelectorAll(".step-item").forEach(item => item.className = "step-item completed");
         progressFill.style.width = "100%";
 
-        // Show success screen
-        successScreen.style.display = "block";
+        // Hide form panels & actions
+        if (activeFlow === "patient") {
+            document.getElementById("p-step-4").classList.remove("active");
+            pSuccessScreen.style.display = "block";
+            successDestText.textContent = patientData.destination;
+            pSuccessScreen.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            document.getElementById("c-step-4").classList.remove("active");
+            cSuccessScreen.style.display = "block";
+            successClinicTitle.textContent = clinicData.name;
+            cSuccessScreen.scrollIntoView({ behavior: 'smooth' });
+        }
         
-        // Scroll smoothly to success header
-        successScreen.scrollIntoView({ behavior: 'smooth' });
+        funnelActionsRow.style.display = "none";
     }, 1500);
 }
 
-// Reset funnel
+// Reset view states
 function resetFunnel() {
-    currentStep = 1;
-    
-    // Reset form elements
+    // Clear lists
     destInput.value = "";
-    nameInput.value = "";
-    phoneInput.value = "";
-    emailInput.value = "";
-    
-    // Reset validation classes
+    pNameInput.value = "";
+    pPhoneInput.value = "";
+    pEmailInput.value = "";
+
+    cNameInput.value = "";
+    cCityInput.value = "";
+    cAddrInput.value = "";
+    cTotalInput.value = "";
+    cIhivInput.value = 0;
+    cIhbvInput.value = 0;
+    cIhcvInput.value = 0;
+    cManagerInput.value = "";
+    cPhoneInput.value = "";
+    cEmailInput.value = "";
+
     document.querySelectorAll(".input-group").forEach(g => g.classList.remove("invalid"));
 
-    // Reset default select drop-downs
+    // Reset selectors
     freqSelect.selectedIndex = 0;
     dialyzerSelect.selectedIndex = 0;
     bloodSelect.selectedIndex = 2; // B+
     reportsSelect.selectedIndex = 0;
+    cPolicySelect.selectedIndex = 0;
 
     // Reset active shifts
     shiftCards.forEach((c, idx) => {
         if (idx === 0) c.classList.add("active");
         else c.classList.remove("active");
     });
+    cBadgeCards.forEach((c, idx) => {
+        if (idx === 0) c.classList.add("active");
+        else c.classList.remove("active");
+    });
 
-    // Reset toggles to negative
+    // Reset viral toggles
     document.querySelectorAll(".btn-toggle").forEach(btn => {
         if (btn.getAttribute("data-value") === "Negative") btn.classList.add("active");
         else btn.classList.remove("active");
     });
 
-    formData.hivStatus = "Negative";
-    formData.hbvStatus = "Negative";
-    formData.hcvStatus = "Negative";
+    patientData.hivStatus = "Negative";
+    patientData.hbvStatus = "Negative";
+    patientData.hcvStatus = "Negative";
+    clinicData.badge = "NABH";
     viralWarningBox.style.display = "none";
 
-    // Restore step contents and buttons view
-    stepContents.forEach(c => c.style.display = "");
+    // Restore forms
+    patientStep = 1;
+    clinicStep = 1;
+    pSuccessScreen.style.display = "none";
+    cSuccessScreen.style.display = "none";
     funnelActionsRow.style.display = "";
-    successScreen.style.display = "none";
 
     init();
     updateStepUI();
@@ -360,35 +494,37 @@ function resetFunnel() {
 // EVENT LISTENERS
 // ==========================================
 nextBtn.addEventListener("click", () => {
-    if (validateStep(currentStep)) {
-        if (currentStep < TOTAL_STEPS) {
-            currentStep++;
+    if (validateCurrentStep()) {
+        const step = activeFlow === "patient" ? patientStep : clinicStep;
+        if (step < TOTAL_STEPS) {
+            if (activeFlow === "patient") patientStep++;
+            else clinicStep++;
             updateStepUI();
             document.querySelector("main").scrollIntoView({ behavior: 'smooth' });
         } else {
-            submitBooking();
+            submitForm();
         }
     }
 });
 
 backBtn.addEventListener("click", () => {
-    if (currentStep > 1) {
-        currentStep--;
+    const step = activeFlow === "patient" ? patientStep : clinicStep;
+    if (step > 1) {
+        if (activeFlow === "patient") patientStep--;
+        else clinicStep--;
         updateStepUI();
         document.querySelector("main").scrollIntoView({ behavior: 'smooth' });
     }
 });
 
-resetBtn.addEventListener("click", resetFunnel);
-
-// Keyboard accessibility (press enter to progress step)
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && e.target.tagName !== "TEXTAREA" && e.target.id !== "reset-funnel-btn") {
+    if (e.key === "Enter" && e.target.tagName !== "TEXTAREA" && !e.target.classList.contains("reset-flow-btn")) {
         e.preventDefault();
         nextBtn.click();
     }
 });
 
-// Run Setup
+// Run
 init();
+updateStepperLayout();
 updateStepUI();
