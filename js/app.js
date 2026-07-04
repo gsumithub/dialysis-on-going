@@ -53,6 +53,9 @@ const STEPPER_CONFIG = {
 // ==========================================
 // DOM ELEMENTS
 // ==========================================
+const landingContainer = document.getElementById("landing-container");
+const wizardContainer = document.getElementById("wizard-container");
+
 const flowPatientBtn = document.getElementById("flow-patient-btn");
 const flowClinicBtn = document.getElementById("flow-clinic-btn");
 const patientSections = document.querySelector(".patient-flow-sections");
@@ -179,12 +182,39 @@ function init() {
         btn.addEventListener("click", resetFunnel);
     });
 
-    // 7. Clear error outlines on input
+    // 7. Landing CTA listeners
+    document.getElementById("landing-start-patient-btn").addEventListener("click", () => {
+        startWizardFromLanding("patient");
+    });
+    document.getElementById("landing-start-clinic-btn").addEventListener("click", () => {
+        startWizardFromLanding("clinic");
+    });
+
+    // Back to Home
+    document.getElementById("wizard-back-home-btn").addEventListener("click", returnToLanding);
+    document.getElementById("brand-logo-btn").addEventListener("click", returnToLanding);
+
+    // 8. Clear error outlines on input
     setupClearErrorsOnInput();
+}
+
+function startWizardFromLanding(flow) {
+    landingContainer.style.display = "none";
+    wizardContainer.style.display = "block";
+    switchFlow(flow);
+    document.querySelector("main").scrollIntoView({ behavior: 'smooth' });
+}
+
+function returnToLanding() {
+    landingContainer.style.display = "block";
+    wizardContainer.style.display = "none";
+    resetFunnel();
+    document.querySelector("main").scrollIntoView({ behavior: 'smooth' });
 }
 
 function setupViralToggle(groupId, stateCallback) {
     const group = document.getElementById(groupId);
+    if (!group) return;
     const buttons = group.querySelectorAll(".btn-toggle");
     buttons.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -221,7 +251,6 @@ function setupClearErrorsOnInput() {
 // FLOW SWITCHING
 // ==========================================
 function switchFlow(flow) {
-    if (activeFlow === flow) return;
     activeFlow = flow;
 
     if (flow === "patient") {
@@ -243,6 +272,7 @@ function switchFlow(flow) {
 function updateStepperLayout() {
     const config = STEPPER_CONFIG[activeFlow];
     stepCircles.forEach((circle, index) => {
+        circle.className = `step-icon-circle`;
         circle.innerHTML = `<i class="${config.icons[index]}"></i>`;
     });
     stepLabels.forEach((label, index) => {
@@ -308,10 +338,12 @@ function updateStepUI() {
     const selectorPrefix = activeFlow === "patient" ? "p-step-" : "c-step-";
     for (let i = 1; i <= TOTAL_STEPS; i++) {
         const section = document.getElementById(`${selectorPrefix}${i}`);
-        if (i === step) {
-            section.classList.add("active");
-        } else {
-            section.classList.remove("active");
+        if (section) {
+            if (i === step) {
+                section.classList.add("active");
+            } else {
+                section.classList.remove("active");
+            }
         }
     }
 
@@ -482,8 +514,8 @@ function resetFunnel() {
     // Restore forms
     patientStep = 1;
     clinicStep = 1;
-    pSuccessScreen.style.display = "none";
-    cSuccessScreen.style.display = "none";
+    if (pSuccessScreen) pSuccessScreen.style.display = "none";
+    if (cSuccessScreen) cSuccessScreen.style.display = "none";
     funnelActionsRow.style.display = "";
 
     init();

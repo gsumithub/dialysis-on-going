@@ -24,7 +24,7 @@
             <div class="header__brand">
                 <i class="ph-bold ph-heartbeat logo-icon"></i>
                 <div class="header__text">
-                    <span class="brand-name">Dialysis<span>OnGo</span></span>
+                    <span class="brand-name" id="brand-logo-btn" style="cursor: pointer;">Dialysis<span>OnGo</span></span>
                     <p class="brand-tagline">Dialysis Care Everywhere You Travel</p>
                 </div>
             </div>
@@ -36,7 +36,82 @@
     </header>
 
     <main>
-        <div class="funnel__container">
+        <!-- ==========================================
+             LANDING PAGE CONTAINER
+             ========================================== -->
+        <div class="landing__container" id="landing-container">
+            <section class="landing-hero">
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <span class="hero-tag">INDIA'S TRUSTED PLATFORM</span>
+                    <h1>Partner With Us, Grow With Us</h1>
+                    <p class="hero-subtitle">DialysisOnGo connects dialysis centers with travelers who need quality care, anytime and anywhere. Simplify bookings and maintain clinical continuity seamlessly.</p>
+                </div>
+            </section>
+
+            <section class="landing-splits-section">
+                <div class="splits-grid">
+                    <!-- Split 1: Patient Booking -->
+                    <div class="split-card cta-patient-card">
+                        <div class="split-card-bg patient-bg"></div>
+                        <div class="split-overlay"></div>
+                        <div class="split-content">
+                            <i class="ph-light ph-airplane-takeoff split-icon"></i>
+                            <h3>Traveler Booking</h3>
+                            <p>Planning a trip? Find verified dialysis clinics, select shift preferences, specify clinical parameters, and coordinate secure medical handovers in a few steps.</p>
+                            <button type="button" class="btn-primary" id="landing-start-patient-btn">
+                                Book Travel Dialysis <i class="ph-bold ph-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Split 2: Clinic Registration (B2B) -->
+                    <div class="split-card cta-clinic-card">
+                        <div class="split-card-bg clinic-bg"></div>
+                        <div class="split-overlay"></div>
+                        <div class="split-content">
+                            <i class="ph-light ph-hospital split-icon"></i>
+                            <h3>Center Registration (B2B)</h3>
+                            <p>Register your dialysis clinic, define active machines and viral isolation availability, display quality badges (NABH/JCI), and receive booking requests directly.</p>
+                            <button type="button" class="btn-primary" id="landing-start-clinic-btn" style="background: #ffffff; color: var(--primary); border: 1px solid #ffffff;">
+                                Register Your Center <i class="ph-bold ph-storefront"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Brand Features Grid matching PDF flyer page 1 -->
+            <section class="landing-features">
+                <div class="feature-item">
+                    <i class="ph-bold ph-users-three"></i>
+                    <h4>More Bookings</h4>
+                    <p>Get discovered by patients searching for dialysis centers in your city.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="ph-bold ph-chart-bar"></i>
+                    <h4>Increase Machine Use</h4>
+                    <p>Reduce idle machine hours and improve clinic occupancy rates with consistent bookings.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="ph-bold ph-shield-check"></i>
+                    <h4>Build Trust</h4>
+                    <p>Increase clinical credibility and acquire patient trust with verified partner badges.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==========================================
+             WIZARD CONTAINER (HIDDEN ON LOAD)
+             ========================================== -->
+        <div class="funnel__container" id="wizard-container" style="display: none;">
+            
+            <div class="wizard-back-row">
+                <button type="button" class="btn-back-home" id="wizard-back-home-btn">
+                    <i class="ph-bold ph-arrow-left"></i> Back to Main Page
+                </button>
+            </div>
+
             <!-- Flow Toggle Tabs -->
             <div class="flow-tabs">
                 <button type="button" class="flow-tab-btn active" id="flow-patient-btn">
