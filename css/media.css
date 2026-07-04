@@ -76,12 +76,32 @@
         gap: 20px;
     }
 
+    .splits-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .landing-hero {
+        padding: 50px 20px;
+    }
+
+    .landing-hero h1 {
+        font-size: 26px;
+    }
+
+    .landing-features {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding-top: 30px;
+    }
+
     .footer__container {
         flex-direction: column;
         gap: 15px;
         text-align: center;
     }
 }
+
 
 /* Small Mobiles (up to 480px) */
 @media screen and (max-width: 480px) {
