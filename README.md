@@ -1,64 +1,51 @@
-# DialysisOnGo Booking Funnel
+# DialysisOnGo Booking & Partner Funnel
 
-An interactive, multi-step booking and patient registration funnel built for **DialysisOnGo**. This application guides clinical travelers through entering their travel plans, custom dialysis routines, and clinical requirements (such as viral marker status) to secure verified dialysis care at their destination.
-
----
-
-## 🛠️ Tech Stack & Libraries
-
-This project is built following the pure frontend architecture, maximizing performance and responsiveness with zero external dependencies to compile.
-
-### Core Stack
-*   **HTML5**: Structured semantically using custom document division classes (Header, Main, Section, Footer) and native input elements (`type="date"`, `type="tel"`, `type="email"`).
-*   **CSS3**: Custom design system styled using CSS Custom Properties (Variables) for theming, CSS Grid for shift selection cards, flexbox alignment, and smooth `@keyframes` transitions (`slideIn`, `pulseGlow`, and `heartbeat`).
-*   **JavaScript (ES6+)**: Custom state machine implementing step-by-step routing, real-time input validations, responsive state updates, and dynamic summary calculations.
-
-### Third-Party Libraries (CDNs)
-*   **Phosphor Icons**: Integrated via unpkg CDN (`@phosphor-icons/web`) to render clinical and travel iconography (heartbeat, location pins, shields, drops, calendars).
-*   **Google Fonts**: Links to `Outfit` (used for clean, premium headings) and `Inter` (clinical-grade, highly readable body copy).
+An interactive, multi-step application built for **DialysisOnGo** ([dialysisongo.com](https://dialysisongo.com/)) supporting two separate user flows:
+1.  **Patient Booking Flow**: Guides travelers through booking slot requests, preferred shifts, and clinical continuity guidelines (HIV/HBV/HCV viral status safety).
+2.  **B2B Clinic Partner Onboarding Flow**: Aligns with the official B2B flyer PDF, guiding dialysis centers through registration, machine inventory, quality badges, and activation of their **5-step Advantage Dashboard**.
 
 ---
 
-## 🧭 Funnel Navigation Routine
+## 🛠️ Tech Stack & CDNs
 
-The booking process is managed as a step-by-step state machine within [app.js](file:///c:/Pojects/DialysisOnGo-Funnel/js/app.js), restricting progress until specific inputs are validated.
+This project is built using a clean, vanilla frontend design system requiring zero builders:
+*   **HTML5**: Structured semantic panels representing both patient and B2B workflows.
+*   **CSS3**: Custom variables styling gold/rose accents, flexible tab buttons, responsive flex rows, and progress step dashboard grids.
+*   **JavaScript (ES6+)**: Dual-flow state machine controlling flow toggles (`activeFlow: 'patient' | 'clinic'`), routing validation rules, and dashboard status pipelines.
 
+---
+
+## 🧭 Operational Step Routines
+
+The stepper dynamically toggles icons, titles, and step templates based on the active tab selection.
+
+### Patient Booking Flow (4 Steps)
 ```mermaid
 graph TD
-    A[Step 1: Destination & Dates] -->|Validate Inputs| B[Step 2: Care Details]
-    B --> C[Step 3: Clinical Info]
-    C --> D[Step 4: Contact & Summary]
-    D -->|Validate & Submit| E[Success Confirmation Screen]
-    E -->|Reset Funnel| A
+    A[Step 1: Destination & Dates] --> B[Step 2: Care Routine]
+    B --> C[Step 3: Clinical Serology]
+    C --> D[Step 4: Contact & Summary Receipt]
+    D -->|Submit| E[Success Timeline Screen]
 ```
+1.  **Destination**: City and start/end dates.
+2.  **Care Details**: Preferred shift grids (Morning, Afternoon, Evening, Night) and weekly session count.
+3.  **Clinical Info**: HIV, HBV, HCV toggles and Blood Group selection.
+4.  **Confirm**: Review dossier summary and submit contact details.
 
-### Step 1: Destination & Dates
-*   **Inputs**: Destination City, Start Date, and End Date of travel.
-*   **Validation**: 
-    *   Destination must be provided.
-    *   Start date must be selected and in the future.
-    *   End date must be selected and must fall after or equal to the start date.
-*   **Dynamic Rules**: Selecting a start date automatically updates the `min` attribute of the end date field.
-
-### Step 2: Care Details
-*   **Inputs**: Preferred Dialysis Shift (interactive cards), Sessions per Week, and Dialyzer preference.
-*   **Interaction**: Click event listeners on cards toggle active visual states and update the underlying memory buffer. No blockages here.
-
-### Step 3: Clinical Information
-*   **Inputs**: Viral Marker Status (HIV, HBV, HCV toggles) and Blood Group.
-*   **Dynamic Warning**: Choosing a "Positive" marker status displays an alert notification reassuring the patient that isolated machinery will be matched for safety.
-
-### Step 4: Contact & Summary
-*   **Inputs**: Patient Name, Phone Number, and Email.
-*   **Live Summary**: Compiles all choices from previous steps into a clean digital "Receipt card" for final review before submission.
-*   **Validation**: 
-    *   Full Name must contain at least 2 characters.
-    *   Phone number must contain at least 8 digits.
-    *   Email, if provided, must match the email regex standard.
-
-### Success Screen
-*   **Feedback**: Initiates a 1.5-second simulated server request showing a loading spinner on the button, then displays a success checkmark animation, a detailed "What happens next?" checklist, and a contact hotline.
-*   **Reset**: Clicking "Submit Another Booking" clears form states, resets selected cards, restores default drop-down indices, and returns the stepper to Step 1.
+### B2B Clinic Partner Flow (4 Steps)
+```mermaid
+graph TD
+    A[Step 1: Clinic Profile] --> B[Step 2: Machine Capacity]
+    B --> C[Step 3: Accreditations]
+    C --> D[Step 4: Coordinator Contact]
+    D -->|Submit| E[B2B Advantage Dashboard Mockup]
+```
+1.  **Clinic Profile**: Center Name, City, and full address.
+2.  **Machine Capacity**: Total active machines and dedicated isolation slots for viral safety.
+3.  **Accreditations**: Toggles for NABH, JCI, and State Board clearances.
+4.  **Coordinator**: HOD Manager contact details and B2B validation check.
+5.  **Dashboard**: Activates the mock dashboard displaying the **5-Step Advantage Lifecycle**:
+    $$\text{Get Inquiries} \rightarrow \text{Booking Received} \rightarrow \text{Confirmed Appointment} \rightarrow \text{Patient's Visit} \rightarrow \text{Session Completed}$$
 
 ---
 
